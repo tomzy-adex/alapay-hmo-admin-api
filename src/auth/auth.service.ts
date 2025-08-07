@@ -31,13 +31,33 @@ export class AuthService {
   async login(payload: AdminLogindto) {
     const { email, password } = payload;
     try {
+      console.log('Debug - Login attempt for email:', email);
+      
       const admin = await this.adminRepository.findOne({
         where: { email },
         relations: ['role', 'hmo'],
       });
 
+      console.log('Debug - Admin found:', !!admin);
+      if (admin) {
+        console.log('Debug - Admin details:', {
+          id: admin.id,
+          email: admin.email,
+          hasRole: !!admin.role,
+          rolePermission: admin.role?.permission,
+          status: admin.status,
+          accountStatus: admin.accountStatus,
+          isEmailVerified: admin.isEmailVerified
+        });
+      }
+
       if (!admin) {
         throw new BadRequestException('Invalid email or password.');
+      }
+
+      if (!admin.role) {
+        console.error('Debug - Admin has no role assigned');
+        throw new BadRequestException('User role not found. Contact administrator.');
       }
 
       if (admin.role.permission !== UserRoles.HMO_ADMIN)
@@ -73,6 +93,8 @@ export class AuthService {
         password,
         admin.password,
       );
+
+      console.log('Debug - Password comparison result:', isPasswordOkay);
 
       if (!isPasswordOkay) {
         throw new BadRequestException('Invalid email or password.');
@@ -112,6 +134,12 @@ export class AuthService {
         }),
       };
     } catch (error) {
+      console.error('Debug - Login error:', error);
+      console.error('Debug - Error details:', {
+        message: error.message,
+        stack: error.stack,
+        email: email
+      });
       throw error;
     }
   }
@@ -194,6 +222,17 @@ export class AuthService {
         'Change password could not be completed:',
         error,
       );
+    }
+  }
+
+  async testDatabaseConnection() {
+    try {
+      const userCount = await this.adminRepository.count();
+      console.log('Database connection test - User count:', userCount);
+      return userCount;
+    } catch (error) {
+      console.error('Database connection test error:', error);
+      throw error;
     }
   }
 }

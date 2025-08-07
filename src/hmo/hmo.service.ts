@@ -32,7 +32,7 @@ import {
 import { PlanSubscriptionRepository } from './repositories/plan-subscription.repository';
 import { EnrollmentQueryDto } from './dto/enrollment-query.dto';
 import { EnrollmentResponseDto } from './dto/enrollment-response.dto';
-import { Like, Between } from 'typeorm';
+import { Like, Between, In } from 'typeorm';
 import * as ExcelJS from 'exceljs';
 import * as PDFDocument from 'pdfkit';
 import { DashboardQueryDto } from './dto/dashboard-query.dto';
@@ -230,18 +230,30 @@ export class HmoService {
   }
 
   async checkAdmin(id: string, hmoId: string): Promise<void> {
+    console.log('Debug - checkAdmin called with id:', id, 'hmoId:', hmoId);
+    
     const hmo = await this.hmoRepository.findOne({
-      where: {
-        id: hmoId,
-        user: { id },
-      },
+      where: { id: hmoId },
       relations: ['user'],
     });
 
-    if (!hmo)
+    console.log('Debug - HMO found:', !!hmo);
+    if (hmo) {
+      console.log('Debug - HMO users:', hmo.user.map(u => ({ id: u.id, email: u.email })));
+    }
+
+    if (!hmo) {
+      throw new ForbiddenException('HMO not found.');
+    }
+
+    const isAdmin = hmo.user.some(user => user.id === id);
+    console.log('Debug - isAdmin:', isAdmin);
+    
+    if (!isAdmin) {
       throw new ForbiddenException(
         'Unauthorized to perform this action for this HMO.',
       );
+    }
   }
 
   async createHealthcarePlan(
@@ -259,6 +271,23 @@ export class HmoService {
 
       if (payload.accountTierIds.length === 0)
         throw new ForbiddenException('Account tier ID is required.');
+
+      // Validate that all account tier IDs exist and belong to this HMO
+      const accountTiers = await this.accountTierRepository.find({
+        where: { 
+          id: In(payload.accountTierIds),
+          hmo: { id: hmoId }
+        },
+        relations: ['hmo']
+      });
+
+      if (accountTiers.length !== payload.accountTierIds.length) {
+        const foundIds = accountTiers.map(tier => tier.id);
+        const missingIds = payload.accountTierIds.filter(id => !foundIds.includes(id));
+        throw new BadRequestException(
+          `Account tier(s) not found or don't belong to this HMO: ${missingIds.join(', ')}`
+        );
+      }
 
       await this.healthPlanCheck(id, hmo, authData, payload);
 
@@ -283,9 +312,16 @@ export class HmoService {
       };
     } catch (error) {
       console.error('Error creating healthcare plan:', error);
-      throw new InternalServerErrorException(
-        'Could not create healthcare plan',
-      );
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        hmoId: hmoQuery.hmoId,
+        adminId: hmoQuery.adminId,
+        payload: payload
+      });
+      
+      // Re-throw the original error for better debugging
+      throw error;
     }
   }
 
@@ -348,12 +384,9 @@ export class HmoService {
         },
       });
 
-      if (plans.length === 0)
-        throw new NotFoundException('Healthcare plan not found');
-
       return {
         success: true,
-        message: 'Healthcare plans fetched successfully.',
+        message: plans.length > 0 ? 'Healthcare plans fetched successfully.' : 'No healthcare plans found.',
         data: plans,
         total,
         currentPage: page,
@@ -386,6 +419,58 @@ export class HmoService {
     }
   }
 
+  async getHealthcarePlansByHmoId(hmoId: string) {
+    try {
+      const [plans, total] = await this.healthcarePlanRepository.findAndCount({
+        where: { hmo: { id: hmoId } },
+        relations: ['hmo', 'accountTiers', 'hospitals'],
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+
+      return {
+        success: true,
+        message: plans.length > 0 ? 'Healthcare plans fetched successfully.' : 'No healthcare plans found.',
+        data: plans,
+        total,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getHmoStatus(hmoId: string) {
+    try {
+      const hmo = await this.hmoRepository.findOne({
+        where: { id: hmoId },
+        select: ['id', 'name', 'status', 'accountStatus']
+      });
+
+      if (!hmo) {
+        throw new NotFoundException('HMO not found');
+      }
+
+      const canCreatePlans = hmo.status === ProcessStatus.APPROVED && hmo.accountStatus === Status.ACTIVE;
+
+      return {
+        success: true,
+        message: 'HMO status retrieved successfully',
+        data: {
+          id: hmo.id,
+          name: hmo.name,
+          status: hmo.status,
+          accountStatus: hmo.accountStatus,
+          canCreatePlans,
+          requiredStatus: ProcessStatus.APPROVED,
+          requiredAccountStatus: Status.ACTIVE
+        }
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createAccountTier(
     hmoQuery: HmoQueryDto,
     authData: AuthData,
@@ -395,16 +480,27 @@ export class HmoService {
       const { adminId: id, hmoId } = hmoQuery;
       const tier = this.accountTierRepository;
 
-      await this.checkAdmin(authData.id, hmoId);
+      console.log('Debug - adminId from query:', id);
+      console.log('Debug - authData.id from token:', authData.id);
+      console.log('Debug - hmoId:', hmoId);
 
-      const accountTier = await tier.findOne({
-        where: { hmo: { id: hmoId }, name: payload.name },
+      await this.checkAdmin(id, hmoId);
+
+      // Check for duplicate account tier with same name AND premium within the same HMO
+      const existingAccountTier = await tier.findOne({
+        where: { 
+          name: payload.name,
+          premium: payload.premium,
+          hmo: { id: hmoId }
+        },
+        relations: ['hmo'],
       });
 
-      if (accountTier)
+      if (existingAccountTier) {
         throw new ForbiddenException(
-          'The account tier aleady exists for this HMO.',
+          `An account tier with name "${payload.name}" and premium ${payload.premium} already exists for this HMO.`,
         );
+      }
 
       await this.accountTierCheck(id, hmoId, authData);
 
@@ -477,6 +573,27 @@ export class HmoService {
         total,
         currentPage: page,
         totalPages: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAccountTiersByHmoId(hmoId: string) {
+    try {
+      const [tiers, total] = await this.accountTierRepository.findAndCount({
+        where: { hmo: { id: hmoId } },
+        relations: ['hmo', 'healthcarePlans'],
+        order: {
+          createdAt: 'DESC',
+        },
+      });
+
+      return {
+        success: true,
+        message: 'Account tiers fetched successfully.',
+        data: tiers,
+        total,
       };
     } catch (error) {
       throw error;

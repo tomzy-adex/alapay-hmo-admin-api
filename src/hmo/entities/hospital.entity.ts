@@ -6,8 +6,8 @@ import { Hmo } from './hmo.entity';
 import { ProviderEnrollment } from './provider-enrollment.entity';
 import { ProviderRating } from './provider-rating.entity';
 import { ProviderService } from './provider-service.entity';
-import { ProviderClaim } from 'src/claim/entities/provider-claim.entity';
-import { ProcessStatus, Status } from 'src/utils/types';
+import { ProviderClaim } from '../../claim/entities/provider-claim.entity';
+import { ProcessStatus, Status } from '../../utils/types';
 
 @Entity('hospitals')
 export class Hospital extends BaseEntity {

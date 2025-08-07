@@ -57,7 +57,6 @@ export class CreateHospitalDto {
     type: [String],
     format: 'uuid',
   })
-  @IsString()
   @IsNotEmpty()
   @IsArray()
   @IsUUID('4', { each: true })

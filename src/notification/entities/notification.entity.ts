@@ -12,7 +12,7 @@ export class Notification extends BaseEntity {
   @Column()
   message: string;
 
-  @Column()
+  @Column({ nullable: true })
   type: string;
 
   @Column({ type: 'jsonb', nullable: true })

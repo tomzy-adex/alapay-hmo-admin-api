@@ -1,3 +1,4 @@
+// eslint-disable-next-line prettier/prettier
 import Redis from 'ioredis';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -26,7 +27,7 @@ export const config = {
     service: process.env.EMAIL_SERVICE,
     host: process.env.EMAIL_HOST,
     port: Number(process.env.EMAIL_PORT),
-    secure: Boolean(process.env.EMAIL_SECURE),
+    secure: process.env.EMAIL_SECURE === 'true',
     auth: {
       user: process.env.USER_EMAIL,
       pass: process.env.EMAIL_PASSWORD,

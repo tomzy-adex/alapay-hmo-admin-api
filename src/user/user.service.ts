@@ -21,7 +21,7 @@ import { transformRoleType } from '../utils/helpers';
 import { EmailService } from '../email/email.service';
 import { AccountApprovalDto, UpdateUserDto } from './dto/update-user.dto';
 import { HmoRepository } from 'src/hmo/repositories/hmo.repository';
-import { Hmo } from 'src/hmo/entities/hmo.entity';
+import { Hmo } from '../hmo/entities/hmo.entity';
 import { CreateHmoDto } from 'src/hmo/dto/create-hmo.dto';
 import { config } from 'src/config';
 import { SendEmailDto } from 'src/email/dto/send-email.dto';

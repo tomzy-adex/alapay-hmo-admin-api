@@ -9,7 +9,7 @@ import {
   IsArray,
   IsUUID,
 } from 'class-validator';
-import { BaseEntity } from 'src/config/repository/base-entity';
+import { BaseEntity } from '../../config/repository/base-entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateHealthcarePlanDto extends BaseEntity {

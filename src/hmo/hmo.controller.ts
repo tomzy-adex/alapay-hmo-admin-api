@@ -39,6 +39,7 @@ import {
   HealthcarePlanQueryDto,
   HmoQueryDto,
   HmosQueryDto,
+  SimpleHmoQueryDto,
 } from './dto/hmo-query.dto';
 import { HospitalService } from './hospital.service';
 import {
@@ -212,7 +213,7 @@ export class HmoController {
   @Get('account-tiers')
   @ApiOperation({
     summary: 'Get account tiers',
-    description: 'Retrieves all account tiers for an HMO',
+    description: 'Retrieves all account tiers for an HMO. Supports both formats: with adminId (for authorized users) or with just hmoId (for public access)',
   })
   @ApiResponse({
     status: 200,
@@ -222,10 +223,32 @@ export class HmoController {
     status: 401,
     description: 'Unauthorized - Invalid or missing token',
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Invalid parameters',
+  })
   @AuditLog('Get', 'Hmo')
-  async getAccountTiers(@Query() hmoQuery: HmosQueryDto) {
-    return await this.hmoService.getAccountTiers(hmoQuery);
+  async getAccountTiers(
+    @Query('hmoId') hmoId: string,
+    @Query('adminId') adminId?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    if (!hmoId) {
+      throw new BadRequestException('hmoId is required');
+    }
+
+    if (adminId) {
+      // Use the existing method with authorization
+      const hmoQuery = { adminId, hmoId, page: page || 1, limit: limit || 10 };
+      return await this.hmoService.getAccountTiers(hmoQuery);
+    } else {
+      // Use the simple method without authorization
+      return await this.hmoService.getAccountTiersByHmoId(hmoId);
+    }
   }
+
+
 
   @Get('account-tier')
   @ApiOperation({
@@ -318,7 +341,7 @@ export class HmoController {
   @Get('plans')
   @ApiOperation({
     summary: 'Get healthcare plans',
-    description: 'Retrieves all healthcare plans for an HMO',
+    description: 'Retrieves all healthcare plans for an HMO. Supports both formats: with adminId (for authorized users) or with just hmoId (for public access)',
   })
   @ApiResponse({
     status: 200,
@@ -328,9 +351,29 @@ export class HmoController {
     status: 401,
     description: 'Unauthorized - Invalid or missing token',
   })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Invalid parameters',
+  })
   @AuditLog('Get', 'Hmo')
-  async getHealthcarePlans(@Query() hmoQuery: HmosQueryDto) {
-    return await this.hmoService.getHealthcarePlans(hmoQuery);
+  async getHealthcarePlans(
+    @Query('hmoId') hmoId: string,
+    @Query('adminId') adminId?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    if (!hmoId) {
+      throw new BadRequestException('hmoId is required');
+    }
+
+    if (adminId) {
+      // Use the existing method with authorization
+      const hmoQuery = { adminId, hmoId, page: page || 1, limit: limit || 10 };
+      return await this.hmoService.getHealthcarePlans(hmoQuery);
+    } else {
+      // Use the simple method without authorization
+      return await this.hmoService.getHealthcarePlansByHmoId(hmoId);
+    }
   }
 
   @Get('plan')
@@ -355,6 +398,20 @@ export class HmoController {
     @Query() healthcarePlanQueryDto: HealthcarePlanQueryDto,
   ) {
     return await this.hmoService.getHealthcarePlanById(healthcarePlanQueryDto);
+  }
+
+  @Get('hmo-status')
+  @ApiOperation({
+    summary: 'Get HMO status',
+    description: 'Check the status of an HMO',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'HMO status retrieved successfully',
+  })
+  @AuditLog('Get', 'Hmo')
+  async getHmoStatus(@Query('hmoId') hmoId: string) {
+    return await this.hmoService.getHmoStatus(hmoId);
   }
 
   @Post('set-family-discounts')
@@ -432,7 +489,7 @@ export class HmoController {
   })
   @AuditLog('Post', 'Hospital')
   async addHospital(
-    @Query() hmoQuery: HmosQueryDto,
+    @Query() hmoQuery: HmoQueryDto,
     @Body() createHospitalDto: CreateHospitalDto,
   ) {
     return await this.hospitalService.addHospital(hmoQuery, createHospitalDto);

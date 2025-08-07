@@ -2,7 +2,7 @@ import { Entity, Column, ManyToOne, OneToOne } from 'typeorm';
 import { ProcessStatus } from '../../utils/types';
 import { PlanSubscription } from './plan-subscription.entity';
 import { BaseEntity } from '../../config/repository/base-entity';
-import { ProviderClaim } from 'src/claim/entities/provider-claim.entity';
+import { ProviderClaim } from '../../claim/entities/provider-claim.entity';
 
 @Entity()
 export class PreAuthRequest extends BaseEntity {

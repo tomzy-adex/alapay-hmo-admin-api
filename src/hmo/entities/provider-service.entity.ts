@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Hospital } from './hospital.entity';
-import { BaseEntity } from 'src/config/repository/base-entity';
+import { BaseEntity } from '../../config/repository/base-entity';
 
 @Entity('provider_services')
 export class ProviderService extends BaseEntity {

@@ -63,3 +63,14 @@ export class HealthcarePlanQueryDto extends HmoQueryDto {
   @IsNotEmpty()
   planId: string;
 }
+
+export class SimpleHmoQueryDto {
+  @ApiProperty({
+    description: 'HMO ID',
+    example: 'd3b07384-d9a0-4f5c-a3dd-9b3786cb1df0',
+    format: 'uuid',
+  })
+  @IsUUID()
+  @IsNotEmpty()
+  hmoId: string;
+}

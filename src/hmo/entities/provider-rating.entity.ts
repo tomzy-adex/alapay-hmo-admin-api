@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { Hospital } from './hospital.entity';
-import { BaseEntity } from 'src/config/repository/base-entity';
+import { BaseEntity } from '../../config/repository/base-entity';
 
 @Entity('provider_ratings')
 export class ProviderRating extends BaseEntity {

@@ -1,0 +1,1444 @@
+{
+  "info": {
+    "name": "HMO Admin API",
+    "description": "Complete API collection for HMO Admin Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Admin Logout",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout?token={{token}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{token}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "reset-password"]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"oldpassword\",\n  \"newPassword\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "change-password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Management",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/profile?adminId=user-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "profile"],
+              "query": [
+                {
+                  "key": "adminId",
+                  "value": "user-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"phone\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/profile?userId=user-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "profile"],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "user-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register HMO Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@hmo.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"Admin\",\n  \"lastName\": \"User\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/hmo-admin/role-id?token=invitation-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "hmo-admin", "role-id"],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "invitation-token"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Register HMO",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test HMO\",\n  \"email\": \"hmo@test.com\",\n  \"phone\": \"+1234567890\",\n  \"address\": \"123 Test Street\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/hmo/role-id?token=invitation-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "hmo", "role-id"],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "invitation-token"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Verify User Account",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/user/verify?code=verification-code",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "verify"],
+              "query": [
+                {
+                  "key": "code",
+                  "value": "verification-code"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Send Onboarding Link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newuser@example.com\",\n  \"roleId\": \"role-id\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/onboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["user", "onboard"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Role Management",
+      "item": [
+        {
+          "name": "Get All Roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/role/roles",
+              "host": ["{{baseUrl}}"],
+              "path": ["role", "roles"]
+            }
+          }
+        },
+        {
+          "name": "Get Role By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/role?roleId=role-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["role"],
+              "query": [
+                {
+                  "key": "roleId",
+                  "value": "role-id"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "HMO Management",
+      "item": [
+        {
+          "name": "Update HMO Details",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated HMO Name\",\n  \"email\": \"updated@hmo.com\",\n  \"phone\": \"+1234567890\",\n  \"address\": \"Updated Address\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/update-hmo-details",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "update-hmo-details"]
+            }
+          }
+        },
+        {
+          "name": "Get HMO Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/hmo-details",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "hmo-details"]
+            }
+          }
+        },
+        {
+          "name": "Verify HMO Account",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"approved\": true,\n  \"reason\": \"Account verified successfully\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/verify-account?hospitalId=hospital-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "verify-account"],
+              "query": [
+                {
+                  "key": "hospitalId",
+                  "value": "hospital-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Account Tier",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Tier\",\n  \"description\": \"Premium healthcare coverage\",\n  \"benefits\": {\n    \"outpatient\": true,\n    \"inpatient\": true,\n    \"dental\": true\n  },\n  \"pricing\": {\n    \"monthly\": 50000,\n    \"yearly\": 500000\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/account-tier?hmoId=hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "account-tier"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Account Tier",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Premium Tier\",\n  \"description\": \"Updated premium healthcare coverage\",\n  \"benefits\": {\n    \"outpatient\": true,\n    \"inpatient\": true,\n    \"dental\": true,\n    \"optical\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/account-tier?hmoId=hmo-id&accountTierId=tier-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "account-tier"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "accountTierId",
+                  "value": "tier-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Account Tiers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/account-tiers?hmoId=hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "account-tiers"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Account Tier By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/account-tier?hmoId=hmo-id&accountTierId=tier-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "account-tier"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "accountTierId",
+                  "value": "tier-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Healthcare Plan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Health Plan\",\n  \"coverageType\": \"Comprehensive\",\n  \"pricingStructure\": \"Monthly\",\n  \"accountTierIds\": [\"tier-id-1\", \"tier-id-2\"],\n  \"familyPlanAvailable\": true,\n  \"dependentDiscountRate\": 20,\n  \"maxDependents\": 5,\n  \"planBenefits\": {\n    \"outpatient\": true,\n    \"inpatient\": true,\n    \"dental\": true,\n    \"optical\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/healthcare-plan?hmoId=hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "healthcare-plan"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Healthcare Plan",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Premium Health Plan\",\n  \"coverageType\": \"Comprehensive\",\n  \"familyPlanAvailable\": true,\n  \"dependentDiscountRate\": 25,\n  \"maxDependents\": 6\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/healthcare-plan?hmoId=hmo-id&healthcarePlanId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "healthcare-plan"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Healthcare Plans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/healthcare-plans?hmoId=hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "healthcare-plans"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Healthcare Plan By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/healthcare-plan?hmoId=hmo-id&healthcarePlanId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "healthcare-plan"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Set Family Discounts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"familySize\": 4,\n  \"discount\": 15,\n  \"basePrice\": 50000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/family-discounts?hmoId=hmo-id&healthcarePlanId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "family-discounts"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Family Discounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/family-discounts?hmoId=hmo-id&healthcarePlanId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "family-discounts"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Hospital",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"City General Hospital\",\n  \"address\": \"123 Hospital Street\",\n  \"phone\": \"+1234567890\",\n  \"email\": \"info@cityhospital.com\",\n  \"specialties\": [\"Cardiology\", \"Orthopedics\"],\n  \"rating\": 4.5\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/hospital?hmoId=hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "hospital"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Hospital File",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/upload?hmoId=hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "upload"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Bulk Upload Hospitals",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"name\": \"Hospital 1\",\n    \"address\": \"Address 1\",\n    \"phone\": \"+1234567890\",\n    \"email\": \"h1@example.com\"\n  },\n  {\n    \"name\": \"Hospital 2\",\n    \"address\": \"Address 2\",\n    \"phone\": \"+1234567891\",\n    \"email\": \"h2@example.com\"\n  }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/bulk-upload?hmoId=hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "bulk-upload"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Hospital",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Hospital Name\",\n  \"address\": \"Updated Address\",\n  \"phone\": \"+1234567890\",\n  \"email\": \"updated@hospital.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/hospital?hmoId=hmo-id&hospitalId=hospital-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "hospital"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "hospitalId",
+                  "value": "hospital-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Plans to Hospital",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\"plan-id-1\", \"plan-id-2\"]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/hospital/plans?hmoId=hmo-id&hospitalId=hospital-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "hospital", "plans"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "hospitalId",
+                  "value": "hospital-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Hospitals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/hospitals?hmoId=hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "hospitals"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Hospital By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/hospital?hmoId=hmo-id&hospitalId=hospital-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "hospital"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "hospitalId",
+                  "value": "hospital-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Hospital",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "\"Hospital no longer operational\""
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hmo/hospital?hmoId=hmo-id&hospitalId=hospital-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "hospital"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "hospitalId",
+                  "value": "hospital-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Plan from Hospital",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/hospital/plan?hmoId=hmo-id&hospitalId=hospital-id&planId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "hospital", "plan"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "hospitalId",
+                  "value": "hospital-id"
+                },
+                {
+                  "key": "planId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Enrollments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/enrollments?hmoId=hmo-id&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "enrollments"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Download Enrollments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/enrollments/download?hmoId=hmo-id&format=excel&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "enrollments", "download"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "format",
+                  "value": "excel"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Dashboard Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/dashboard?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "dashboard"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Transaction History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/transactions?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "transactions"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Service Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/analytics/services?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "analytics", "services"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Payment Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hmo/analytics/payments?startDate=2024-01-01&endDate=2024-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["hmo", "analytics", "payments"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Claims Management",
+      "item": [
+        {
+          "name": "Get All User Claims by Hospital",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/healthcare-provider/hospital-id/users?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "healthcare-provider", "hospital-id", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get User Claim by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/user?claimId=claim-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "user"],
+              "query": [
+                {
+                  "key": "claimId",
+                  "value": "claim-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User Claim Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\",\n  \"reason\": \"Claim approved after review\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/claims/user/status?claimId=claim-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "user", "status"],
+              "query": [
+                {
+                  "key": "claimId",
+                  "value": "claim-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Claims by User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/user/user-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "user", "user-id"]
+            }
+          }
+        },
+        {
+          "name": "Get Claims by Hospital",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/hospital/hospital-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "hospital", "hospital-id"]
+            }
+          }
+        },
+        {
+          "name": "Get Claims by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/status/PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "status", "PENDING"]
+            }
+          }
+        },
+        {
+          "name": "Get All Provider Claims",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/provider?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "provider"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Provider Claim by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/provider/provider-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "provider", "provider-id"]
+            }
+          }
+        },
+        {
+          "name": "Update Provider Claim",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"diagnosis\": \"Updated diagnosis\",\n  \"serviceBreakdown\": [\n    {\n      \"service\": \"Consultation\",\n      \"amount\": 5000\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/claims/provider/provider-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "provider", "provider-id"]
+            }
+          }
+        },
+        {
+          "name": "Update Provider Claim Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"APPROVED\",\n  \"reason\": \"Provider claim approved\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/claims/provider/provider-id/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "provider", "provider-id", "status"]
+            }
+          }
+        },
+        {
+          "name": "Get Provider Claims by Hospital",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/provider/hospital/hospital-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "provider", "hospital", "hospital-id"]
+            }
+          }
+        },
+        {
+          "name": "Get Provider Claims by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/claims/provider/status/PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["claims", "provider", "status", "PENDING"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment Management",
+      "item": [
+        {
+          "name": "Create Payment Options",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"duration\": \"MONTHLY\",\n    \"amount\": 50000,\n    \"discount\": 0\n  },\n  {\n    \"duration\": \"YEARLY\",\n    \"amount\": 500000,\n    \"discount\": 10\n  }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payment/options?hmoId=hmo-id&healthcarePlanId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "options"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Payment Options",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": \"option-id\",\n    \"duration\": \"MONTHLY\",\n    \"amount\": 55000,\n    \"discount\": 5\n  }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/payment/options?hmoId=hmo-id&healthcarePlanId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "options"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Payment Options",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/payment/options?hmoId=hmo-id&healthcarePlanId=plan-id&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "options"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Payment Option By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/payment/options/option-id?hmoId=hmo-id&healthcarePlanId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "options", "option-id"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Notify Outstanding Payments",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/payment/notify-outstanding?hmoId=hmo-id&healthcarePlanId=plan-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "notify-outstanding"],
+              "query": [
+                {
+                  "key": "hmoId",
+                  "value": "hmo-id"
+                },
+                {
+                  "key": "healthcarePlanId",
+                  "value": "plan-id"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Organization Management",
+      "item": [
+        {
+          "name": "Create Organization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Organization\",\n  \"email\": \"org@test.com\",\n  \"phone\": \"+1234567890\",\n  \"address\": \"123 Organization Street\",\n  \"hmoId\": \"hmo-id\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations"]
+            }
+          }
+        },
+        {
+          "name": "Assign Plan to Organization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"organizationId\": \"org-id\",\n  \"healthcarePlanId\": \"plan-id\",\n  \"customPricing\": {\n    \"monthly\": 45000,\n    \"yearly\": 450000\n  },\n  \"customBenefits\": {\n    \"outpatient\": true,\n    \"inpatient\": true,\n    \"dental\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/assign-plan",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "assign-plan"]
+            }
+          }
+        },
+        {
+          "name": "Get Organizations by HMO",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/hmo/hmo-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "hmo", "hmo-id"]
+            }
+          }
+        },
+        {
+          "name": "Get Organization Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/org-id",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "org-id"]
+            }
+          }
+        },
+        {
+          "name": "Get Organization Enrollment Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/org-id/enrollment-stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "org-id", "enrollment-stats"]
+            }
+          }
+        },
+        {
+          "name": "Check Expiring Plans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/check-expiring-plans?days=30",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "check-expiring-plans"],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+} 

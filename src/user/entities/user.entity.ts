@@ -19,7 +19,7 @@ import { Notification } from '../../notification/entities/notification.entity';
 import { AuditLog } from '../../audit-log/entities/audit-log.entity';
 import { Hospital } from '../../hmo/entities/hospital.entity';
 import { Organization } from '../../organization/entities/organization.entity';
-import { Note } from 'src/claim/entities/note.entity';
+import { Note } from '../../claim/entities/note.entity';
 
 @Entity('users')
 export class User extends BaseEntity {

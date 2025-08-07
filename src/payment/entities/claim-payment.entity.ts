@@ -1,6 +1,6 @@
-import { ProviderClaim } from 'src/claim/entities/provider-claim.entity';
-import { BaseEntity } from 'src/config/repository/base-entity';
-import { ClaimPaymentStatus } from 'src/utils/types';
+import { ProviderClaim } from '../../claim/entities/provider-claim.entity';
+import { BaseEntity } from '../../config/repository/base-entity';
+import { ClaimPaymentStatus } from '../../utils/types';
 import { Entity, Column, OneToOne } from 'typeorm';
 
 @Entity('health_provider_claim_payments')

@@ -1,11 +1,11 @@
-import { BaseEntity } from 'src/config/repository/base-entity';
+import { BaseEntity } from '../../config/repository/base-entity';
 import { Entity, Column, OneToOne, OneToMany } from 'typeorm';
-import { Hmo } from 'src/hmo/entities/hmo.entity';
+import { Hmo } from '../../hmo/entities/hmo.entity';
 import { ManyToOne } from 'typeorm';
-import { Hospital } from 'src/hmo/entities/hospital.entity';
-import { ProcessStatus } from 'src/utils/types';
-import { PreAuthRequest } from 'src/hmo/entities/pre-auth-request.entity';
-import { ClaimPayment } from 'src/payment/entities/claim-payment.entity';
+import { Hospital } from '../../hmo/entities/hospital.entity';
+import { ProcessStatus } from '../../utils/types';
+import { PreAuthRequest } from '../../hmo/entities/pre-auth-request.entity';
+import { ClaimPayment } from '../../payment/entities/claim-payment.entity';
 import { Note } from './note.entity';
 
 @Entity('health_provider_claims')

@@ -16,15 +16,15 @@ import { PlanSubscription } from '../hmo/entities/plan-subscription.entity';
 import { Dependent } from '../hmo/entities/dependent.entity';
 import { PreAuthRequest } from '../hmo/entities/pre-auth-request.entity';
 import { Transaction } from '../payment/entities/transaction.entity';
-import { ProviderEnrollment } from 'src/hmo/entities/provider-enrollment.entity';
-import { ProviderRating } from 'src/hmo/entities/provider-rating.entity';
-import { ProviderService } from 'src/hmo/entities/provider-service.entity';
-import { OrganizationPlan } from 'src/organization/entities/organization-plan.entity';
-import { OrganizationRenewal } from 'src/organization/entities/organization-renewal.entity';
-import { Organization } from 'src/organization/entities/organization.entity';
-import { ProviderClaim } from 'src/claim/entities/provider-claim.entity';
-import { Note } from 'src/claim/entities/note.entity';
-import { ClaimPayment } from 'src/payment/entities/claim-payment.entity';
+import { ProviderEnrollment } from '../hmo/entities/provider-enrollment.entity';
+import { ProviderRating } from '../hmo/entities/provider-rating.entity';
+import { ProviderService } from '../hmo/entities/provider-service.entity';
+import { OrganizationPlan } from '../organization/entities/organization-plan.entity';
+import { OrganizationRenewal } from '../organization/entities/organization-renewal.entity';
+import { Organization } from '../organization/entities/organization.entity';
+import { ProviderClaim } from '../claim/entities/provider-claim.entity';
+import { Note } from '../claim/entities/note.entity';
+import { ClaimPayment } from '../payment/entities/claim-payment.entity';
 
 export const typeOrmConfig: DataSourceOptions = {
   type: 'postgres',

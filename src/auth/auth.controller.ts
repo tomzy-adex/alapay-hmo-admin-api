@@ -45,7 +45,17 @@ export class AuthController {
   })
   @AuditLog('Post', 'Auth')
   async login(@Body() payload: AdminLogindto) {
-    return await this.authService.login(payload);
+    try {
+      return await this.authService.login(payload);
+    } catch (error) {
+      console.error('Controller - Login error:', error);
+      console.error('Controller - Error details:', {
+        message: error.message,
+        stack: error.stack,
+        payload: payload
+      });
+      throw error;
+    }
   }
 
   @UseGuards(AdminGuard)
@@ -105,5 +115,28 @@ export class AuthController {
   @AuditLog('Put', 'Auth')
   async changePassword(@Body() payload: UpdateAdminDto) {
     return await this.authService.changePassword(payload);
+  }
+
+  @Post('test-db')
+  @ApiOperation({
+    summary: 'Test database connection',
+    description: 'Tests if the database connection is working',
+  })
+  async testDb() {
+    try {
+      const userCount = await this.authService.testDatabaseConnection();
+      return {
+        success: true,
+        message: 'Database connection successful',
+        userCount: userCount
+      };
+    } catch (error) {
+      console.error('Database test error:', error);
+      return {
+        success: false,
+        message: 'Database connection failed',
+        error: error.message
+      };
+    }
   }
 }

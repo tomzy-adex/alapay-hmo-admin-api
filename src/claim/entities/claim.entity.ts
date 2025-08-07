@@ -1,4 +1,4 @@
-import { Hospital } from 'src/hmo/entities/hospital.entity';
+import { Hospital } from '../../hmo/entities/hospital.entity';
 import { BaseEntity } from '../../config/repository/base-entity';
 import { HealthcarePlan } from '../../hmo/entities/healthcare-plan.entity';
 import { User } from '../../user/entities/user.entity';

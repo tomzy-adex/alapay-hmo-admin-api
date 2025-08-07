@@ -10,7 +10,7 @@ import { extname } from 'path';
 import { readFile } from 'fs/promises';
 import { HealthcarePlanRepository } from './repositories/healthcare-plan.repository';
 import { HospitalRepository } from './repositories/hospital.repository';
-import { HmosQueryDto } from './dto/hmo-query.dto';
+import { HmosQueryDto, HmoQueryDto } from './dto/hmo-query.dto';
 import {
   CreateBulkHospitalDto,
   CreateHospitalDto,
@@ -39,15 +39,39 @@ export class HospitalService {
   ) {}
 
   async addHospital(
-    hmoQuery: HmosQueryDto,
+    hmoQuery: HmoQueryDto,
     createHospitalDto: CreateHospitalDto,
   ) {
     try {
       const { adminId, hmoId } = hmoQuery;
-      const { planIds } = createHospitalDto;
+      const { planIds, name, email } = createHospitalDto;
 
       // Ensure the admin is authorized
       await this.hmoService.checkAdmin(adminId, hmoId);
+
+      // Check for duplicate hospital (same name and email)
+      const existingHospital = await this.hospitalRepository.findOne({
+        where: [
+          { name: name },
+          { email: email }
+        ]
+      });
+
+      if (existingHospital) {
+        if (existingHospital.name === name && existingHospital.email === email) {
+          throw new BadRequestException(
+            `Hospital with name "${name}" and email "${email}" already exists.`
+          );
+        } else if (existingHospital.name === name) {
+          throw new BadRequestException(
+            `Hospital with name "${name}" already exists.`
+          );
+        } else {
+          throw new BadRequestException(
+            `Hospital with email "${email}" already exists.`
+          );
+        }
+      }
 
       // Fetch all plans by their IDs
       const plans = await this.healthcarePlanRepository.find({
@@ -73,9 +97,23 @@ export class HospitalService {
         message: `Hospital added successfully with ${plans.length} plan(s).`,
         data: created,
       };
+
+      return {
+        success: true,
+        message: `Hospital added successfully with ${plans.length} plan(s).`,
+        data: created,
+      };
     } catch (error) {
       console.error('Error adding hospital:', error);
-      throw new InternalServerErrorException('Error adding hospital');
+      console.error('Error details:', {
+        message: error.message,
+        stack: error.stack,
+        hmoId: hmoQuery.hmoId,
+        adminId: hmoQuery.adminId,
+        hospitalData: createHospitalDto
+      });
+      // Re-throw the original error for better debugging
+      throw error;
     }
   }
 

@@ -1,7 +1,7 @@
-import { BaseEntity } from 'src/config/repository/base-entity';
+import { BaseEntity } from '../../config/repository/base-entity';
 import { Entity, Column, CreateDateColumn, ManyToOne } from 'typeorm';
 import { ProviderClaim } from './provider-claim.entity';
-import { User } from 'src/user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { Claim } from './claim.entity';
 
 @Entity('notes')

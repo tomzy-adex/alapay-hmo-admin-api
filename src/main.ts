@@ -1,10 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-require('dotenv').config();
+/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { config } from './config';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+require('dotenv').config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
