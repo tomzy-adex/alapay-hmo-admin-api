@@ -51,6 +51,10 @@ export class CacheService implements OnModuleInit {
     return await this.ioredis.del(key);
   }
 
+  async del(key: string) {
+    return await this.ioredis.del(key);
+  }
+
   async clear() {
     return this.ioredis.flushdb();
   }

@@ -20,6 +20,7 @@ export enum ProcessStatus {
   REJECTED = 'Rejected',
   OVERDUE = 'Overdue',
   PARTIAL = 'Partial',
+  COMPLETED = 'Completed',
 }
 
 export enum OnboardingType {

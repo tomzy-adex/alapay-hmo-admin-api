@@ -53,6 +53,21 @@ export class User extends BaseEntity {
   @Column({ default: Status.DORMANT })
   accountStatus: Status;
 
+  @Column({ nullable: true })
+  bloodGroup: string;
+
+  @Column({ nullable: true })
+  height: number;
+
+  @Column({ nullable: true })
+  genotype: string;
+
+  @Column({ nullable: true })
+  profilePix: string;
+
+  @Column({ nullable: true })
+  gender: string;
+
   @Column({ default: false })
   isDeveloper: boolean;
 

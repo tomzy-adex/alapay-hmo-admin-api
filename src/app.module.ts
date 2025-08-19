@@ -17,6 +17,12 @@ import { CacheModule } from './cache/cache.module';
 import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
 import { OrganizationModule } from './organization/organization.module';
+import { CustomerModule } from './customer/customer.module';
+import { PlansModule } from './plans/plans.module';
+import { HealthcareProvidersModule } from './healthcare-providers/healthcare-providers.module';
+import { TransactionsModule } from './transactions/transactions.module';
+import { TreatmentClaimsModule } from './treatment-claims/treatment-claims.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -42,6 +48,12 @@ import { OrganizationModule } from './organization/organization.module';
     EmailModule.register(),
     AuthModule.register(),
     OrganizationModule,
+    CustomerModule,
+    PlansModule,
+    HealthcareProvidersModule,
+    TransactionsModule,
+    TreatmentClaimsModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
