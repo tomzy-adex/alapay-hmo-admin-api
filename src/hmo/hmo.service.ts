@@ -28,6 +28,7 @@ import {
   HealthcarePlanQueryDto,
   HmoQueryDto,
   HmosQueryDto,
+  HmoListQueryDto,
 } from './dto/hmo-query.dto';
 import { PlanSubscriptionRepository } from './repositories/plan-subscription.repository';
 import { EnrollmentQueryDto } from './dto/enrollment-query.dto';
@@ -465,6 +466,59 @@ export class HmoService {
           requiredStatus: ProcessStatus.APPROVED,
           requiredAccountStatus: Status.ACTIVE
         }
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllHmos(query: HmoListQueryDto) {
+    try {
+      const { page, limit, search, status, accountStatus, sortBy, sortOrder } = query;
+
+      // Build where conditions
+      const whereConditions: any = {};
+
+      if (search) {
+        whereConditions.name = Like(`%${search}%`);
+      }
+
+      if (status) {
+        whereConditions.status = status;
+      }
+
+      if (accountStatus) {
+        whereConditions.accountStatus = accountStatus;
+      }
+
+      // Build order conditions
+      const orderConditions: any = {};
+      if (sortBy) {
+        orderConditions[sortBy] = sortOrder || 'DESC';
+      } else {
+        orderConditions.createdAt = 'DESC';
+      }
+
+      const [hmos, total] = await this.hmoRepository.findAndCount({
+        where: whereConditions,
+        relations: ['plans', 'hospitals', 'organizations'],
+        skip: (page - 1) * limit,
+        take: limit,
+        order: orderConditions,
+      });
+
+      return {
+        success: true,
+        message: 'HMOs retrieved successfully',
+        data: hmos,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+          hasNext: page < Math.ceil(total / limit),
+          hasPrev: page > 1,
+        },
       };
     } catch (error) {
       throw error;

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, IsOptional, IsEnum } from 'class-validator';
 import { QueryDto } from 'src/config/dto/query.dto';
+import { ProcessStatus, Status } from 'src/utils/types';
 
 export class HmoQueryDto {
   @ApiProperty({
@@ -73,4 +74,53 @@ export class SimpleHmoQueryDto {
   @IsUUID()
   @IsNotEmpty()
   hmoId: string;
+}
+
+export class HmoListQueryDto extends QueryDto {
+  @ApiProperty({
+    description: 'Search term for HMO name, email, or address',
+    example: 'Premium HMO',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  search?: string;
+
+  @ApiProperty({
+    description: 'Filter by HMO status',
+    enum: ProcessStatus,
+    example: ProcessStatus.APPROVED,
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(ProcessStatus)
+  status?: ProcessStatus;
+
+  @ApiProperty({
+    description: 'Filter by HMO account status',
+    enum: Status,
+    example: Status.ACTIVE,
+    required: false,
+  })
+  @IsOptional()
+  @IsEnum(Status)
+  accountStatus?: Status;
+
+  @ApiProperty({
+    description: 'Sort field',
+    example: 'name',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  sortBy?: string;
+
+  @ApiProperty({
+    description: 'Sort order',
+    example: 'ASC',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  sortOrder?: 'ASC' | 'DESC';
 }

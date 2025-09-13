@@ -40,6 +40,7 @@ import {
   HmoQueryDto,
   HmosQueryDto,
   SimpleHmoQueryDto,
+  HmoListQueryDto,
 } from './dto/hmo-query.dto';
 import { HospitalService } from './hospital.service';
 import {
@@ -66,6 +67,84 @@ export class HmoController {
     private readonly hmoService: HmoService,
     private readonly hospitalService: HospitalService,
   ) {}
+
+  @Get()
+  @ApiOperation({
+    summary: 'Get all HMOs',
+    description: 'Retrieves all HMOs in the system with pagination, search, and filtering capabilities',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'HMOs retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'HMOs retrieved successfully' },
+        data: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', example: 'd3b07384-d9a0-4f5c-a3dd-9b3786cb1df0' },
+              name: { type: 'string', example: 'Premium HMO' },
+              description: { type: 'string', example: 'A comprehensive health maintenance organization' },
+              email: { type: 'string', example: 'info@premiumhmo.com' },
+              phoneNumber: { type: 'string', example: '+2348012345678' },
+              address: { type: 'string', example: '123 Healthcare Avenue, Lagos' },
+              status: { type: 'string', example: 'APPROVED' },
+              accountStatus: { type: 'string', example: 'ACTIVE' },
+              createdAt: { type: 'string', example: '2024-01-15T10:30:00Z' },
+              updatedAt: { type: 'string', example: '2024-01-15T10:30:00Z' },
+              plans: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', example: 'plan-id' },
+                    name: { type: 'string', example: 'Premium Health Plan' },
+                  },
+                },
+              },
+              hospitals: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', example: 'hospital-id' },
+                    name: { type: 'string', example: 'City General Hospital' },
+                  },
+                },
+              },
+            },
+          },
+        },
+        pagination: {
+          type: 'object',
+          properties: {
+            total: { type: 'number', example: 50 },
+            page: { type: 'number', example: 1 },
+            limit: { type: 'number', example: 10 },
+            totalPages: { type: 'number', example: 5 },
+            hasNext: { type: 'boolean', example: true },
+            hasPrev: { type: 'boolean', example: false },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or missing token',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error',
+  })
+  @AuditLog('Get', 'HMO')
+  async getAllHmos(@Query() query: HmoListQueryDto) {
+    return await this.hmoService.getAllHmos(query);
+  }
 
   @Put('update-hmo-details')
   @ApiOperation({
