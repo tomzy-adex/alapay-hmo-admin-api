@@ -10,7 +10,7 @@ export class ProviderEnrollment extends BaseEntity {
   provider: Hospital;
 
   @ManyToOne(() => Hmo)
-  @JoinColumn({ name: 'hmo_id' })
+  @JoinColumn()
   hmo: Hmo;
 
   @Column({ type: 'date' })

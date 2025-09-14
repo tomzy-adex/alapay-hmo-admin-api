@@ -15,7 +15,7 @@ export class AccountTier extends BaseEntity {
   coverageDetails: string; // Description of coverage for the tier
 
   @ManyToOne(() => Hmo, (hmo) => hmo.accountTiers)
-  @JoinColumn({ name: 'hmo_id' })
+  @JoinColumn()
   hmo: Hmo;
 
   @ManyToMany(() => HealthcarePlan, (plan) => plan.accountTiers)

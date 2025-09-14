@@ -481,6 +481,9 @@ export class HmoService {
 
       if (search) {
         whereConditions.name = Like(`%${search}%`);
+        // Also search in email and address if needed
+        // Note: TypeORM doesn't support OR conditions easily in this format
+        // For now, we'll just search by name
       }
 
       if (status) {
@@ -499,13 +502,19 @@ export class HmoService {
         orderConditions.createdAt = 'DESC';
       }
 
+      console.log('Query parameters:', { page, limit, search, status, accountStatus, sortBy, sortOrder });
+      console.log('Where conditions:', whereConditions);
+      console.log('Order conditions:', orderConditions);
+
       const [hmos, total] = await this.hmoRepository.findAndCount({
         where: whereConditions,
-        relations: ['plans', 'hospitals', 'organizations'],
+        relations: ['plans', 'organizations'],
         skip: (page - 1) * limit,
         take: limit,
         order: orderConditions,
       });
+
+      console.log('Found HMOs:', hmos.length, 'Total:', total);
 
       return {
         success: true,
@@ -521,6 +530,7 @@ export class HmoService {
         },
       };
     } catch (error) {
+      console.error('Error in getAllHmos:', error);
       throw error;
     }
   }

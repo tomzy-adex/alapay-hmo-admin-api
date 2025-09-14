@@ -43,7 +43,7 @@ export class Organization extends BaseEntity {
   enrolledEmployeeCount: number;
 
   @ManyToOne(() => Hmo, (hmo) => hmo.organizations)
-  @JoinColumn({ name: 'hmo_id' })
+  @JoinColumn()
   hmo: Hmo;
 
   @OneToMany(() => User, (user) => user.organization)

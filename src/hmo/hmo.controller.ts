@@ -813,9 +813,16 @@ export class HmoController {
   })
   @AuditLog('Get', 'Enrollment')
   async getEnrollments(
-    @Query() hmoQuery: HmosQueryDto,
+    @Query('adminId') adminId: string,
+    @Query('hmoId') hmoId: string,
     @Query() query: EnrollmentQueryDto,
   ) {
+    const hmoQuery: HmosQueryDto = {
+      adminId,
+      hmoId,
+      page: query.page || 1,
+      limit: query.limit || 12,
+    };
     return await this.hmoService.getEnrollments(hmoQuery, query);
   }
 

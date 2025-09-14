@@ -1,7 +1,7 @@
 import { BaseEntity } from '../../config/repository/base-entity';
 import { User } from '../../user/entities/user.entity';
 import { Notification } from '../../notification/entities/notification.entity';
-import { Entity, Column, OneToMany, ManyToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { HealthcarePlan } from './healthcare-plan.entity';
 import { ProcessStatus, Status } from '../../utils/types';
 import { AccountTier } from './account-tier.entity';
@@ -47,7 +47,12 @@ export class Hmo extends BaseEntity {
   @OneToMany(() => AccountTier, (accountTiers) => accountTiers.hmo)
   accountTiers: AccountTier[];
 
-  @ManyToMany(() => Hospital, (hospital) => hospital.hmos, { cascade: true })
+  @ManyToMany(() => Hospital, (hospital) => hospital.hmos)
+  @JoinTable({
+    name: 'hmo_hospitals',
+    joinColumn: { name: 'hmo_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'hospital_id', referencedColumnName: 'id' }
+  })
   hospitals: Hospital[];
 
   @OneToMany(() => Organization, (organization) => organization.hmo)
